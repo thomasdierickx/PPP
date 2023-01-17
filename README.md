@@ -10,7 +10,7 @@ With this project, the user will have the possibility to upload 3-5 different im
 - An interface for editing the images, such as cropping, resizing, and adding text.
 - A preview feature that allows users to see their designs before placing an order.
 - Integration with a machine learning model to cut certain objects from the images and put them together.
-- An order placement feature that allows users to submit their designs and purchase the t-shirts.
+- (Doesn't need to be worked out) An order placement feature that allows users to submit their designs and purchase the t-shirts.
 
 ## What can the app do?
 - Collect images of user
