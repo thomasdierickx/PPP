@@ -14,6 +14,7 @@
 		E045CA4C29795F18007667C4 /* UI_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045CA4B29795F18007667C4 /* UI_Tests.swift */; };
 		E045CA5629795F18007667C4 /* UI_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045CA5529795F18007667C4 /* UI_UITests.swift */; };
 		E045CA5829795F18007667C4 /* UI_UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045CA5729795F18007667C4 /* UI_UITestsLaunchTests.swift */; };
+		E0FC851F2979896D00AA9640 /* ImageCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0FC851E2979896D00AA9640 /* ImageCarouselView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		E045CA5129795F18007667C4 /* UI_UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UI_UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E045CA5529795F18007667C4 /* UI_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI_UITests.swift; sourceTree = "<group>"; };
 		E045CA5729795F18007667C4 /* UI_UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI_UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E0FC851E2979896D00AA9640 /* ImageCarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				E045CA3929795F17007667C4 /* UI_App.swift */,
+				E0FC851E2979896D00AA9640 /* ImageCarouselView.swift */,
 				E045CA3B29795F17007667C4 /* ContentView.swift */,
 				E045CA3D29795F18007667C4 /* Assets.xcassets */,
 				E045CA3F29795F18007667C4 /* UI_.entitlements */,
@@ -259,6 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0FC851F2979896D00AA9640 /* ImageCarouselView.swift in Sources */,
 				E045CA3C29795F17007667C4 /* ContentView.swift in Sources */,
 				E045CA3A29795F17007667C4 /* UI_App.swift in Sources */,
 			);
