@@ -32,7 +32,7 @@ struct ContentView: View {
                                 .resizable()
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                         }
-                    }.frame(width: 400, height: 450, alignment: .center)
+                    }.frame(width: 400, height: 450, alignment: .topTrailing)
                     NavigationLink(destination: StepView()) {
                         Button(action: { }) {
                             Text("BEGIN")
@@ -44,17 +44,11 @@ struct ContentView: View {
                         .cornerRadius(30)
                     }
                     .padding()
+                    .navigationBarBackButtonHidden(true)
                 }
-                .padding()
-                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.automatic)
             }
         }
-    }
-}
-
-struct ResultView: View {
-    var body: some View {
-        Text("ResultView")
     }
 }
 

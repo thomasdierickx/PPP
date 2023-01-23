@@ -76,24 +76,19 @@ struct ImageCarouselView<Content: View>: View {
 
 struct ImageCarouselView_Previews: PreviewProvider {
     static var previews: some View {
-        
-        // 8
         GeometryReader { geometry in
             ImageCarouselView(numberOfImages: 3) {
                 Image("T-shirt1")
                     .resizable()
-                    .padding()
                     .scaledToFill()
                     .frame(width: geometry.size.width, height: geometry.size.height)
                 Image("T-shirt2")
                     .resizable()
                     .scaledToFill()
-                    .padding()
                     .frame(width: geometry.size.width, height: geometry.size.height)
                 Image("T-shirt3")
                     .resizable()
                     .scaledToFill()
-                    .padding()
                     .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }.frame(width: 400, height: 450, alignment: .center)

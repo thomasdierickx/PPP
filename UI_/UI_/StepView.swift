@@ -9,7 +9,6 @@ import SwiftUI
 
 struct StepView: View {
     var body: some View {
-        NavigationView {
             ZStack {
                 Image("Background")
                 VStack {
@@ -22,44 +21,44 @@ struct StepView: View {
                         .foregroundColor(Color("DarkBlue"))
                     VStack {
                         Text("Step1.")
-                            .font(.system(size: 25) .weight(.bold))
-                            .font(.custom("NunitoSans", size: 25))
+                            .font(.system(size: 20) .weight(.bold))
+                            .font(.custom("NunitoSans", size: 20))
                             .foregroundColor(Color("DarkBlue"))
-                            .frame(maxWidth: 350, alignment: .leading)
+                            .frame(maxWidth: 300, alignment: .leading)
                         Text("Choose 3 to 5 different images from your gallery")
-                            .font(.system(size: 25) .weight(.regular))
-                            .font(.custom("NunitoSans", size: 25))
+                            .font(.system(size: 20) .weight(.regular))
+                            .font(.custom("NunitoSans", size: 20))
                             .foregroundColor(Color("DarkBlue"))
-                            .frame(maxWidth: 350, alignment: .leading)
+                            .frame(maxWidth: 300, alignment: .leading)
                     }
                     .padding()
                     VStack {
                         Text("Step2.")
-                            .font(.system(size: 25) .weight(.bold))
-                            .font(.custom("NunitoSans", size: 25))
+                            .font(.system(size: 20) .weight(.bold))
+                            .font(.custom("NunitoSans", size: 20))
                             .foregroundColor(Color("DarkBlue"))
-                            .frame(maxWidth: 350, alignment: .leading)
+                            .frame(maxWidth: 300, alignment: .leading)
                         Text("The program will automatically give you a generated image based on the images you sent in.")
-                            .font(.system(size: 25) .weight(.regular))
-                            .font(.custom("NunitoSans", size: 25))
+                            .font(.system(size: 20) .weight(.regular))
+                            .font(.custom("NunitoSans", size: 20))
                             .foregroundColor(Color("DarkBlue"))
-                            .frame(maxWidth: 350, alignment: .leading)
+                            .frame(maxWidth: 300, alignment: .leading)
                     }
                     .padding()
                     VStack {
                         Text("Step3.")
-                            .font(.system(size: 25) .weight(.bold))
-                            .font(.custom("NunitoSans", size: 25))
+                            .font(.system(size: 20) .weight(.bold))
+                            .font(.custom("NunitoSans", size: 20))
                             .foregroundColor(Color("DarkBlue"))
-                            .frame(maxWidth: 350, alignment: .leading)
+                            .frame(maxWidth: 300, alignment: .leading)
                         Text("Once step 2 is done, you can \n- Reset the process again \n- Change the style \n- Look at the end result")
-                            .font(.system(size: 25) .weight(.regular))
-                            .font(.custom("NunitoSans", size: 25))
+                            .font(.system(size: 20) .weight(.regular))
+                            .font(.custom("NunitoSans", size: 20))
                             .foregroundColor(Color("DarkBlue"))
-                            .frame(maxWidth: 350, alignment: .leading)
+                            .frame(maxWidth: 300, alignment: .leading)
                     }
                     .padding()
-                    NavigationLink(destination: ResultView()) {
+                    NavigationLink(destination: ChooseImgs()) {
                         Button(action: { }) {
                             Text("BEGIN")
                                 .font(.system(size: 20) .weight(.bold))
@@ -70,9 +69,9 @@ struct StepView: View {
                         .cornerRadius(30)
                     }
                     .padding()
+                    .padding()
                 }
             }
-        }
     }
 }
 
