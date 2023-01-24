@@ -12,13 +12,14 @@ import PhotosUI
 struct ChooseImgs: View {
     
     @State private var showAlert = false
+    @State private var selectedIndex: Int? = nil
     
     @State private var image: Image?
     @State private var showingImagePicker = true
     @State private var inputImage = [UIImage]()
     
-    @State private var imgMin = 2
-    @State private var imgMax = 4
+    @State private var imgMin = 3
+    @State private var imgMax = 5
     
     var body: some View {
             ZStack {
@@ -32,26 +33,27 @@ struct ChooseImgs: View {
                         .font(.system(size: 80) .weight(.heavy))
                         .foregroundColor(Color("DarkBlue"))
                     HStack {
-                        ForEach(inputImage, id: \.self) { img in
-                            Image(uiImage: img)
+                        ForEach(inputImage.indices, id: \.self) { index in
+                            Image(uiImage: self.inputImage[index])
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 50.0)
                                 .onTapGesture {
+                                    self.selectedIndex = index
                                     self.showAlert = true
                                 }
-                                .alert(isPresented: $showAlert) {
+                                .alert(isPresented: self.$showAlert) {
                                     Alert(
                                         title: Text("Delete"),
-                                        message: Text("You are deleting an image, do you want to continue?"),
+                                        message: Text(self.inputImage[index].description),
                                         primaryButton: .default(Text("Yes")) {
-                                            if let index = self.inputImage.firstIndex(of: img) {
-                                                self.inputImage.remove(at: index)
-                                            }},
+                                            self.inputImage.remove(at: self.selectedIndex!)
+                                        },
                                         secondaryButton: .default(Text("No")))
                                 }
                         }
                     }
+                    .padding()
                     Text("(Choose min. of 3 to a max. 5 images)")
                     Text("(Tap on the image to delete it)")
                         .font(.system(size: 15) .weight(.light))
@@ -63,15 +65,18 @@ struct ChooseImgs: View {
                             }) {
                                 Text("Choose different images")
                                     .font(.system(size: 20) .weight(.bold))
-                                    .foregroundColor(Color("White"))
+                                    .foregroundColor(Color("LightBlue"))
                             }
                             .frame(maxWidth: 300, maxHeight: 50)
-                            .background(Color("LightBlue"))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 30)
+                                    .stroke(Color("LightBlue"), lineWidth: 6)
+                            )
                             .cornerRadius(30)
                         }
                         .padding()
                     }
-                    if inputImage.count > imgMin {
+                    if inputImage.count >= imgMin {
                         NavigationLink(destination: {}) {
                             Button(action: {}) {
                                 Text("NEXT")
@@ -84,16 +89,13 @@ struct ChooseImgs: View {
                         }
                         .padding()
                     }
+                    Text("You already have \(inputImage.count) images")
                 }
             }
             .sheet(isPresented: $showingImagePicker) {
                 ImagePicker(image: self.$inputImage)
             }
     }
-//    func loadImage() {
-//        guard let inputImage = inputImage else { return }
-//        image = Image(uiImage: inputImage)
-//    }
 }
 
 struct ImagePicker: UIViewControllerRepresentable {

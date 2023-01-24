@@ -44,7 +44,7 @@ struct ContentView: View {
                         .cornerRadius(30)
                     }
                     .padding()
-                    .navigationBarBackButtonHidden(true)
+                    .navigationBarBackButtonHidden(false)
                 }
                 .navigationBarTitleDisplayMode(.inline)
             }
