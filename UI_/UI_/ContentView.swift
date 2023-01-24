@@ -46,7 +46,7 @@ struct ContentView: View {
                     .padding()
                     .navigationBarBackButtonHidden(true)
                 }
-                .navigationBarTitleDisplayMode(.automatic)
+                .navigationBarTitleDisplayMode(.inline)
             }
         }
     }

@@ -7,24 +7,18 @@
 
 import SwiftUI
 import UIKit
+import PhotosUI
 
 struct ChooseImgs: View {
+    
+    @State private var showAlert = false
+    
     @State private var image: Image?
-    @State private var image2: Image?
-    @State private var image3: Image?
-    @State private var image4: Image?
-    @State private var image5: Image?
-    
     @State private var showingImagePicker = true
-    @State private var inputImage: UIImage?
-    @State private var inputImage2: UIImage?
-    @State private var inputImage3: UIImage?
-    @State private var inputImage4: UIImage?
-    @State private var inputImage5: UIImage?
+    @State private var inputImage = [UIImage]()
     
-    var uiImageOne: UIImage?
-    var uiImageTwo: UIImage?
-    var uiImageThree: UIImage?
+    @State private var imgMin = 2
+    @State private var imgMax = 4
     
     var body: some View {
             ZStack {
@@ -37,40 +31,73 @@ struct ChooseImgs: View {
                     Text("T-SHIRT")
                         .font(.system(size: 80) .weight(.heavy))
                         .foregroundColor(Color("DarkBlue"))
-                    if !(inputImage == nil) {
-                        Image(uiImage: self.inputImage!)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300.0,height: 300.0)
-                    }
-                    NavigationLink(destination: ImagePicker(image: self.$inputImage)) {
-                        Button(action: {
-                            self.showingImagePicker = true
-                        }) {
-                            Text("Choose images")
-                                .font(.system(size: 20) .weight(.bold))
-                                .foregroundColor(Color("White"))
+                    HStack {
+                        ForEach(inputImage, id: \.self) { img in
+                            Image(uiImage: img)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50.0)
+                                .onTapGesture {
+                                    self.showAlert = true
+                                }
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("Delete"),
+                                        message: Text("You are deleting an image, do you want to continue?"),
+                                        primaryButton: .default(Text("Yes")) {
+                                            if let index = self.inputImage.firstIndex(of: img) {
+                                                self.inputImage.remove(at: index)
+                                            }},
+                                        secondaryButton: .default(Text("No")))
+                                }
                         }
-                        .frame(maxWidth: 300, maxHeight: 50)
-                        .background(Color("LightBlue"))
-                        .cornerRadius(30)
                     }
-                    .padding()
+                    Text("(Choose min. of 3 to a max. 5 images)")
+                    Text("(Tap on the image to delete it)")
+                        .font(.system(size: 15) .weight(.light))
+                        .foregroundColor(Color("DarkBlue"))
+                    if inputImage.count < imgMax {
+                        NavigationLink(destination: ImagePicker(image: self.$inputImage)) {
+                            Button(action: {
+                                self.showingImagePicker = true
+                            }) {
+                                Text("Choose different images")
+                                    .font(.system(size: 20) .weight(.bold))
+                                    .foregroundColor(Color("White"))
+                            }
+                            .frame(maxWidth: 300, maxHeight: 50)
+                            .background(Color("LightBlue"))
+                            .cornerRadius(30)
+                        }
+                        .padding()
+                    }
+                    if inputImage.count > imgMin {
+                        NavigationLink(destination: {}) {
+                            Button(action: {}) {
+                                Text("NEXT")
+                                    .font(.system(size: 20) .weight(.bold))
+                                    .foregroundColor(Color("White"))
+                            }
+                            .frame(maxWidth: 300, maxHeight: 50)
+                            .background(Color("LightBlue"))
+                            .cornerRadius(30)
+                        }
+                        .padding()
+                    }
                 }
             }
-            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+            .sheet(isPresented: $showingImagePicker) {
                 ImagePicker(image: self.$inputImage)
             }
     }
-
-    func loadImage() {
-        guard let inputImage = inputImage else { return }
-        image = Image(uiImage: inputImage)
-    }
+//    func loadImage() {
+//        guard let inputImage = inputImage else { return }
+//        image = Image(uiImage: inputImage)
+//    }
 }
 
 struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
+    @Binding var image: [UIImage]
     @Environment(\.presentationMode) var presentationMode
 
     func makeCoordinator() -> Coordinator {
@@ -82,7 +109,6 @@ struct ImagePicker: UIViewControllerRepresentable {
         picker.sourceType = .photoLibrary
         picker.allowsEditing = false
         picker.delegate = context.coordinator
-//        picker.allowsMultipleSelection = true
         return picker
     }
 
@@ -98,7 +124,7 @@ struct ImagePicker: UIViewControllerRepresentable {
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let uiImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                parent.image = uiImage
+                parent.image.append(uiImage)
             }
             parent.presentationMode.wrappedValue.dismiss()
         }
