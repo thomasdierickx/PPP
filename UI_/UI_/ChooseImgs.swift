@@ -89,7 +89,13 @@ struct ChooseImgs: View {
                         }
                         .padding()
                     }
-                    Text("You already have \(inputImage.count) images")
+                    if inputImage.count == 1 {
+                        Text("You already have \(inputImage.count) image")
+                            .foregroundColor(Color("LightBlue"))
+                    } else {
+                        Text("You already have \(inputImage.count) images")
+                            .foregroundColor(Color("LightBlue"))
+                    }
                 }
             }
             .sheet(isPresented: $showingImagePicker) {
