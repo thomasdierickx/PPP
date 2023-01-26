@@ -77,7 +77,7 @@ struct ChooseImgs: View {
                         .padding()
                     }
                     if inputImage.count >= imgMin {
-                        NavigationLink(destination: {}) {
+                        NavigationLink(destination: RemoveBG(inputImage: self.$inputImage, outputImage: self.$inputImage, newArr: [])) {
                             Button(action: {}) {
                                 Text("NEXT")
                                     .font(.system(size: 20) .weight(.bold))
