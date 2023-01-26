@@ -12,10 +12,11 @@ import Vision
 
 struct RemoveBG: View {
 
-    @Binding var inputImage: [UIImage]
-    @Binding var outputImage: [UIImage]
+    @State var inputImage: [UIImage]
     
-    @State var newArr: [UIImage]
+    @State var outputImage: [UIImage]
+    
+    @State var isShown = false
     
     var body: some View {
         ZStack {
@@ -39,7 +40,7 @@ struct RemoveBG: View {
                             Image(uiImage: self.inputImage[index])
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 50.0)
+                                .frame(width: 100.0)
                         }
                     }
                     VStack {
@@ -47,14 +48,28 @@ struct RemoveBG: View {
                             Image(uiImage: self.outputImage[index])
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 50.0)
+                                .frame(width: 100.0)
                         }
                     }
                 }
-                Button(action: {runVisionRequest()}, label: {
-                    Text("Run Image Segmentation")
-                })
-                .padding()
+                if !isShown {
+                    Button(action: {runVisionRequest()}, label: {
+                        Text("Run Image Segmentation")
+                    })
+                    .padding()
+                } else {
+                    NavigationLink(destination: {}) {
+                        Button(action: {}) {
+                            Text("NEXT")
+                                .font(.system(size: 20) .weight(.bold))
+                                .foregroundColor(Color("White"))
+                        }
+                        .frame(maxWidth: 300, maxHeight: 50)
+                        .background(Color("LightBlue"))
+                        .cornerRadius(30)
+                    }
+                    .padding()
+                }
             }
         }
     }
@@ -67,27 +82,33 @@ struct RemoveBG: View {
         let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
         request.imageCropAndScaleOption = .scaleFill
 
-        for input in inputImage {
+        for i in 0..<inputImage.count {
             DispatchQueue.global().async {
 
-                let handler = VNImageRequestHandler(cgImage: input.cgImage!, options: [:])
+                let handler = VNImageRequestHandler(cgImage: inputImage[i].cgImage!, options: [:])
                 
                 do {
                     try handler.perform([request])
                 }catch {
                     print(error)
                 }
+                
+                print(inputImage[0])
+                print(outputImage[0])
             }
         }
     }
     
     func maskInputImage() {
-        let bgImage = UIImage.imageFromColor(color: UIColor(Color.white.opacity(0.0)), size: CGSize(width: self.inputImage[0].size.width, height: self.inputImage[0].size.height), scale: self.inputImage[0].scale)!
-
         for i in 0..<inputImage.count {
+            let bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: self.inputImage[i].size.width, height: self.inputImage[i].size.height), scale: self.inputImage[i].scale)!
+            
             let beginImage = CIImage(cgImage: inputImage[i].cgImage!)
             let background = CIImage(cgImage: bgImage.cgImage!)
             let mask = CIImage(cgImage: outputImage[i].cgImage!)
+            
+            print(inputImage[i])
+            print(outputImage[i])
             
             if let compositeImage = CIFilter(name: "CIBlendWithMask", parameters: [
                                             kCIInputImageKey: beginImage,
@@ -101,16 +122,18 @@ struct RemoveBG: View {
                 inputImage[i] = UIImage(cgImage: filteredImageRef!)
             }
         }
+        isShown = true
     }
+
 
     func visionRequestDidComplete(request: VNRequest, error: Error?) {
         for i in 0..<inputImage.count {
             DispatchQueue.main.async {
                 if let observations = request.results as? [VNCoreMLFeatureValueObservation], let segmentationmap = observations.first?.featureValue.multiArrayValue {
                     
-                    let segmentationMask = segmentationmap.image(min: 0, max: 1)
+                    let segmentationMask = segmentationmap.image(min: 0, max: 5)
                     
-                    self.outputImage[i] = segmentationMask!.resized(to: self.inputImage[i].size)
+                    self.outputImage[i] = segmentationMask!.resizedImage(for: self.inputImage[i].size)!
                     
                     maskInputImage()
                 }
@@ -127,6 +150,6 @@ struct GradientPoint {
 struct RemoveBG_Previews: PreviewProvider {
     @Binding var inputImage: [UIImage]
     static var previews: some View {
-        RemoveBG(inputImage: .constant([]), outputImage: .constant([]), newArr: [])
+        RemoveBG(inputImage: [], outputImage: [])
     }
 }

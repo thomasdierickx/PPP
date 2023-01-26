@@ -18,7 +18,7 @@ struct ChooseImgs: View {
     @State private var showingImagePicker = true
     @State private var inputImage = [UIImage]()
     
-    @State private var imgMin = 3
+    @State private var imgMin = 1
     @State private var imgMax = 5
     
     var body: some View {
@@ -54,7 +54,7 @@ struct ChooseImgs: View {
                         }
                     }
                     .padding()
-                    Text("(Choose min. of 3 to a max. 5 images)")
+                    Text("(Choose min. of \(imgMin) to a max. \(imgMax) images)")
                     Text("(Tap on the image to delete it)")
                         .font(.system(size: 15) .weight(.light))
                         .foregroundColor(Color("DarkBlue"))
@@ -77,7 +77,7 @@ struct ChooseImgs: View {
                         .padding()
                     }
                     if inputImage.count >= imgMin {
-                        NavigationLink(destination: RemoveBG(inputImage: self.$inputImage, outputImage: self.$inputImage, newArr: [])) {
+                        NavigationLink(destination: RemoveBG(inputImage: self.inputImage, outputImage: self.inputImage)) {
                             Button(action: {}) {
                                 Text("NEXT")
                                     .font(.system(size: 20) .weight(.bold))
