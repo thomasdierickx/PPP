@@ -34,31 +34,34 @@ struct RemoveBG: View {
                     .font(.custom("NunitoSans", size: 20))
                     .foregroundColor(Color("DarkBlue"))
                     .padding()
-                HStack {
-                    VStack {
-                        ForEach(inputImage.indices, id: \.self) { index in
-                            Image(uiImage: self.inputImage[index])
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100.0)
-                        }
-                    }
-                    VStack {
-                        ForEach(outputImage.indices, id: \.self) { index in
-                            Image(uiImage: self.outputImage[index])
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100.0)
-                        }
-                    }
-                }
                 if !isShown {
+                    HStack {
+                        VStack {
+                            ForEach(inputImage.indices, id: \.self) { index in
+                                Image(uiImage: self.inputImage[index])
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100.0)
+                                    
+                            }
+                        }
+                    }
                     Button(action: {runVisionRequest()}, label: {
                         Text("Run Image Segmentation")
                     })
                     .padding()
                 } else {
-                    NavigationLink(destination: {}) {
+                    HStack {
+                        VStack {
+                            ForEach(inputImage.indices, id: \.self) { index in
+                                Image(uiImage: self.inputImage[index])
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100.0)
+                            }
+                        }
+                    }
+                    NavigationLink(destination: ResultImg(inputImage: self.inputImage)) {
                         Button(action: {}) {
                             Text("NEXT")
                                 .font(.system(size: 20) .weight(.bold))
@@ -75,41 +78,36 @@ struct RemoveBG: View {
     }
     
     func runVisionRequest() {
-
-        guard let model = try? VNCoreMLModel(for: DeepLabV3(configuration: .init()).model)
-        else { return }
-
+        guard let model = try? VNCoreMLModel(for: DeepLabV3(configuration: .init()).model) else { return }
         let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
         request.imageCropAndScaleOption = .scaleFill
-
+        
         for i in 0..<inputImage.count {
+            let handler = VNImageRequestHandler(cgImage: inputImage[i].cgImage!, options: [:])
             DispatchQueue.global().async {
-
-                let handler = VNImageRequestHandler(cgImage: inputImage[i].cgImage!, options: [:])
-                
                 do {
                     try handler.perform([request])
                 }catch {
                     print(error)
                 }
-                
-                print(inputImage[0])
-                print(outputImage[0])
             }
         }
     }
     
     func maskInputImage() {
+        
+        var bgImage: UIImage
+        var beginImage: CIImage
+        var background: CIImage
+        var mask: CIImage
+        
         for i in 0..<inputImage.count {
-            let bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: self.inputImage[i].size.width, height: self.inputImage[i].size.height), scale: self.inputImage[i].scale)!
-            
-            let beginImage = CIImage(cgImage: inputImage[i].cgImage!)
-            let background = CIImage(cgImage: bgImage.cgImage!)
-            let mask = CIImage(cgImage: outputImage[i].cgImage!)
-            
-            print(inputImage[i])
-            print(outputImage[i])
-            
+            bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: self.inputImage[i].size.width, height: self.inputImage[i].size.height), scale: self.inputImage[i].scale)!
+
+            beginImage = CIImage(cgImage: inputImage[i].cgImage!)
+            background = CIImage(cgImage: bgImage.cgImage!)
+            mask = CIImage(cgImage: outputImage[i].cgImage!)
+
             if let compositeImage = CIFilter(name: "CIBlendWithMask", parameters: [
                                             kCIInputImageKey: beginImage,
                                             kCIInputBackgroundImageKey:background,
@@ -118,7 +116,7 @@ struct RemoveBG: View {
                 let ciContext = CIContext(options: nil)
 
                 let filteredImageRef = ciContext.createCGImage(compositeImage, from: compositeImage.extent)
-                
+
                 inputImage[i] = UIImage(cgImage: filteredImageRef!)
             }
         }
@@ -131,15 +129,29 @@ struct RemoveBG: View {
             DispatchQueue.main.async {
                 if let observations = request.results as? [VNCoreMLFeatureValueObservation], let segmentationmap = observations.first?.featureValue.multiArrayValue {
                     
-                    let segmentationMask = segmentationmap.image(min: 0, max: 5)
+                    let segmentationMask = segmentationmap.image(min: 1, max: 2)
                     
                     self.outputImage[i] = segmentationMask!.resizedImage(for: self.inputImage[i].size)!
                     
-                    maskInputImage()
+                    // check for person
+                    let request = VNDetectHumanRectanglesRequest { (request, error) in
+                        if let observations = request.results as? [VNDetectedObjectObservation], !observations.isEmpty {
+                            // person detected
+                            self.maskInputImage()
+                        } else {
+                            // person not detected
+                            print("person not detected in image")
+                        }
+                    }
+                    // Perform the request
+                    let handler = VNImageRequestHandler(cgImage: self.inputImage[i].cgImage!, options: [:])
+                    try? handler.perform([request])
+                    
                 }
             }
         }
     }
+
 }
 
 struct GradientPoint {
