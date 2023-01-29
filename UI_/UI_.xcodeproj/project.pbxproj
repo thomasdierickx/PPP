@@ -18,6 +18,7 @@
 		E045CA5629795F18007667C4 /* UI_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045CA5529795F18007667C4 /* UI_UITests.swift */; };
 		E045CA5829795F18007667C4 /* UI_UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045CA5729795F18007667C4 /* UI_UITestsLaunchTests.swift */; };
 		E051F44C298307BC00E60BEF /* ResultImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = E051F44B298307BC00E60BEF /* ResultImg.swift */; };
+		E051F44E2986DDF500E60BEF /* TshirtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E051F44D2986DDF500E60BEF /* TshirtView.swift */; };
 		E0589A5D298200DC00A16173 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4C298200DB00A16173 /* Array+Extensions.swift */; };
 		E0589A5E298200DC00A16173 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4D298200DB00A16173 /* Math.swift */; };
 		E0589A5F298200DC00A16173 /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4E298200DB00A16173 /* UIImage+CVPixelBuffer.swift */; };
@@ -73,6 +74,7 @@
 		E045CA5529795F18007667C4 /* UI_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI_UITests.swift; sourceTree = "<group>"; };
 		E045CA5729795F18007667C4 /* UI_UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI_UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E051F44B298307BC00E60BEF /* ResultImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultImg.swift; sourceTree = "<group>"; };
+		E051F44D2986DDF500E60BEF /* TshirtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TshirtView.swift; sourceTree = "<group>"; };
 		E0589A4C298200DB00A16173 /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		E0589A4D298200DB00A16173 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		E0589A4E298200DB00A16173 /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				E025C19D297E9AD300D648EE /* ChooseImgs.swift */,
 				E025C1AB2981E02E00D648EE /* RemoveBG.swift */,
 				E051F44B298307BC00E60BEF /* ResultImg.swift */,
+				E051F44D2986DDF500E60BEF /* TshirtView.swift */,
 			);
 			path = UI_;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				E025C19C297E999D00D648EE /* StepView.swift in Sources */,
 				E0589A6A298200DC00A16173 /* CGImage+RawBytes.swift in Sources */,
 				E0589A6D298200DC00A16173 /* CVPixelBuffer+Rotate.swift in Sources */,
+				E051F44E2986DDF500E60BEF /* TshirtView.swift in Sources */,
 				E0FC851F2979896D00AA9640 /* ImageCarouselView.swift in Sources */,
 				E0589A6B298200DC00A16173 /* MLMultiArray+Image.swift in Sources */,
 				E025C19E297E9AD300D648EE /* ChooseImgs.swift in Sources */,
@@ -453,6 +457,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs permission to access photos on your device";
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -505,6 +510,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs permission to access photos on your device";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -524,6 +530,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs permission to access photos on your device";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -539,6 +546,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = be.iamthomas.www;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -564,6 +572,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs permission to access photos on your device";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -579,6 +588,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = be.iamthomas.www;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
