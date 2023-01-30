@@ -13,10 +13,35 @@ import Vision
 struct RemoveBG: View {
 
     @State var inputImage: [UIImage]
-    
     @State var outputImage: [UIImage]
-    
     @State var isShown = false
+    @State private var loadingBar = false
+    
+    struct ActivityIndicator: UIViewRepresentable {
+        @Binding var isAnimating: Bool
+        let style: UIActivityIndicatorView.Style
+
+        func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
+            return UIActivityIndicatorView(style: style)
+        }
+
+        func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
+            isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
+        }
+    }
+    
+    var hStack : some View {
+        HStack {
+            VStack {
+                ForEach(inputImage.indices, id: \.self) { index in
+                    Image(uiImage: self.inputImage[index])
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 75)
+                }
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -35,32 +60,16 @@ struct RemoveBG: View {
                     .foregroundColor(Color("DarkBlue"))
                     .padding()
                 if !isShown {
-                    HStack {
-                        VStack {
-                            ForEach(inputImage.indices, id: \.self) { index in
-                                Image(uiImage: self.inputImage[index])
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100.0)
-                                    
-                            }
-                        }
-                    }
+                    hStack
                     Button(action: {runVisionRequest()}, label: {
                         Text("Run Image Segmentation")
                     })
                     .padding()
-                } else {
-                    HStack {
-                        VStack {
-                            ForEach(inputImage.indices, id: \.self) { index in
-                                Image(uiImage: self.inputImage[index])
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100.0)
-                            }
-                        }
+                    if loadingBar {
+                        ActivityIndicator(isAnimating: $loadingBar, style: .large)
                     }
+                } else {
+                    hStack
                     NavigationLink(destination: ResultImg(inputImage: self.inputImage)) {
                         Button(action: {}) {
                             Text("NEXT")
@@ -78,6 +87,7 @@ struct RemoveBG: View {
     }
     
     func runVisionRequest() {
+        loadingBar = true
         guard let model = try? VNCoreMLModel(for: DeepLabV3(configuration: .init()).model) else { return }
         let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
         request.imageCropAndScaleOption = .scaleFill
@@ -91,6 +101,9 @@ struct RemoveBG: View {
                     print(error)
                 }
             }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            loadingBar = false
         }
     }
     
@@ -129,7 +142,7 @@ struct RemoveBG: View {
             DispatchQueue.main.async {
                 if let observations = request.results as? [VNCoreMLFeatureValueObservation], let segmentationmap = observations.first?.featureValue.multiArrayValue {
                     
-                    let segmentationMask = segmentationmap.image(min: 1, max: 2)
+                    let segmentationMask = segmentationmap.image(min: 0, max: 1)
                     
                     self.outputImage[i] = segmentationMask!.resizedImage(for: self.inputImage[i].size)!
                     
@@ -138,20 +151,19 @@ struct RemoveBG: View {
                         if let observations = request.results as? [VNDetectedObjectObservation], !observations.isEmpty {
                             // person detected
                             self.maskInputImage()
+                            print("Img #\(inputImage[i]): Person is detected")
                         } else {
                             // person not detected
-                            print("person not detected in image")
+                            print("Img #\(inputImage[i]): Person is not detected")
                         }
                     }
                     // Perform the request
                     let handler = VNImageRequestHandler(cgImage: self.inputImage[i].cgImage!, options: [:])
                     try? handler.perform([request])
-                    
                 }
             }
         }
     }
-
 }
 
 struct GradientPoint {

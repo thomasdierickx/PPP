@@ -15,6 +15,16 @@ struct ResultImg: View {
     @State private var imageDragAmounts: [CGSize]
     @State private var scales: [CGFloat]
     @State private var selectedColor = Color.black
+    @State private var showingAlert = false
+    @State private var squareDimension = 30
+    @State private var cornerRadius = 10
+    let minimumScale: CGFloat = -1.0
+
+    init(inputImage: [UIImage]) {
+        self._inputImage = State(initialValue: inputImage)
+        self._imageDragAmounts = State(initialValue: Array(repeating: CGSize.zero, count: inputImage.count))
+        self._scales = State(initialValue: Array(repeating: 1.0, count: inputImage.count))
+    }
     
     var zStackView: some View {
         ZStack {
@@ -46,17 +56,30 @@ struct ResultImg: View {
         }
     }
     
-    let minimumScale: CGFloat = -1.0
-
-    init(inputImage: [UIImage]) {
-        self._inputImage = State(initialValue: inputImage)
-        self._imageDragAmounts = State(initialValue: Array(repeating: CGSize.zero, count: inputImage.count))
-        self._scales = State(initialValue: Array(repeating: 1.0, count: inputImage.count))
+    var roundedRectangle: some View {
+        let colorName = [".black", ".green", ".blue", ".white", ".red", ".yellow"]
+        
+        let colorMap: [String: Color] = [
+            ".black": .black,
+            ".green": .green,
+            ".blue": .blue,
+            ".white": .white,
+            ".red": .red,
+            ".yellow": .yellow
+        ]
+        
+        return HStack {
+            ForEach(colorName.indices, id: \.self) { index in
+                RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
+                    .frame(width: CGFloat(squareDimension), height: CGFloat(squareDimension))
+                    .foregroundColor(colorMap[colorName[index]] ?? .black)
+                    .onTapGesture {
+                        self.selectedColor = colorMap[colorName[index]] ?? .black
+                    }
+                    .padding(.trailing, 10)
+            }
+        }.padding()
     }
-    
-    @State private var showingAlert = false
-    @State private var squareDimension = 30
-    @State private var cornerRadius = 10
     
     var body: some View {
         ZStack {
@@ -75,58 +98,14 @@ struct ResultImg: View {
                     .foregroundColor(Color("DarkBlue"))
                     .padding()
                 zStackView
-                HStack {
-                    RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                        .frame(width: CGFloat(squareDimension), height: CGFloat(squareDimension))
-                        .foregroundColor(.black)
-                        .onTapGesture {
-                            self.selectedColor = .black
-                        }
-                        .padding(.trailing, 10)
-                    RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                        .frame(width: CGFloat(squareDimension), height: CGFloat(squareDimension))
-                        .foregroundColor(.green)
-                        .onTapGesture {
-                            self.selectedColor = .green
-                        }
-                        .padding(.trailing, 10)
-                    RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                        .frame(width: CGFloat(squareDimension), height: CGFloat(squareDimension))
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            self.selectedColor = .blue
-                        }
-                        .padding(.trailing, 10)
-                    RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                        .frame(width: CGFloat(squareDimension), height: CGFloat(squareDimension))
-                        .foregroundColor(.white)
-                        .onTapGesture {
-                            self.selectedColor = .white
-                        }
-                        .padding(.trailing, 10)
-                    RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                        .frame(width: CGFloat(squareDimension), height: CGFloat(squareDimension))
-                        .foregroundColor(.red)
-                        .onTapGesture {
-                            self.selectedColor = .red
-                        }
-                        .padding(.trailing, 10)
-                    RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                        .frame(width: CGFloat(squareDimension), height: CGFloat(squareDimension))
-                        .foregroundColor(.yellow)
-                        .onTapGesture {
-                            self.selectedColor = .yellow
-                        }
-                        .padding(.trailing, 10)
-                }
-                .padding()
+                roundedRectangle
                 Button("Save to image") {
                     let image = zStackView.snapshot()
 
                     UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
                     self.showingAlert = true
                 }
-                NavigationLink(destination: TshirtView(globalImage: globalImage)) {
+                NavigationLink(destination: TshirtView(globalImage: globalImage, colorToImage: UIImage())) {
                     Button(action: {}) {
                         Text("SOW ON T-SHIRT")
                             .font(.system(size: 20) .weight(.bold))
