@@ -19,6 +19,8 @@ struct ResultImg: View {
     @State private var squareDimension = 30
     @State private var cornerRadius = 10
     let minimumScale: CGFloat = -1.0
+    let text: String = ""
+    @State private var text2DragAmount = CGSize.zero
     
     @State private var selection = "Explosion"
     let backgroundImage = ["Explosion", "Electric", "Cash", "American Flag", "None"]
@@ -34,12 +36,10 @@ struct ResultImg: View {
             Rectangle()
                 .frame(width: 300, height: 300)
                 .foregroundColor(selectedColor)
-            if selection != "none" {
-                Image(selection)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 300, height: 300)
-            }
+            Image(selection)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 300, height: 300)
             ForEach(inputImage.indices, id: \.self) { index in
                 Image(uiImage: self.inputImage[index])
                     .resizable()
@@ -62,6 +62,18 @@ struct ResultImg: View {
                     )
                     .clipped()
             }
+            Text(text2)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .frame(width: 300, height: 300)
+                .gesture(
+                    DragGesture(coordinateSpace: .global)
+                        .onChanged{
+                            self.text2DragAmount = CGSize(width: $0.translation.width, height: $0.translation.height)
+                        }
+                )
+                .offset(text2DragAmount)
         }
     }
     
@@ -90,16 +102,18 @@ struct ResultImg: View {
         }.padding()
     }
     
+    @State private var text2 = "Your text here"
+    
     var body: some View {
         ZStack {
             Image("Background")
             VStack {
                 Text("Make your own")
-                    .font(.system(size: 20) .weight(.bold))
-                    .font(.custom("NunitoSans", size: 20))
+                    .font(.system(size: 15) .weight(.bold))
+                    .font(.custom("NunitoSans", size: 15))
                     .foregroundColor(Color("DarkBlue"))
                 Text("T-SHIRT")
-                    .font(.system(size: 80) .weight(.heavy))
+                    .font(.system(size: 70) .weight(.heavy))
                     .foregroundColor(Color("DarkBlue"))
                 Text("Personalize your composition \n & save it!")
                     .font(.system(size: 20) .weight(.regular))
@@ -110,8 +124,12 @@ struct ResultImg: View {
                         Text($0)
                     }
                 }
+                .frame(width: 300,height: 60)
                 zStackView
                 roundedRectangle
+                TextField("Enter some text", text: $text2)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 300, height: 60)
                 Button("Save to image") {
                     let image = zStackView.snapshot()
 

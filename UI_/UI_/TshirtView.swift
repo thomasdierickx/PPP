@@ -65,10 +65,20 @@ struct TshirtView: View {
         }.padding()
     }
     
+    @State private var basicStyle = ""
+    var styleName = ["StarryNight", "Pointillism"]
+    
     var body: some View {
         ZStack {
             Image("Background")
             VStack {
+                Picker("Choose a style?", selection: $basicStyle) {
+                    ForEach(styleName, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(width: 300)
                 vStackView
                 roundedRectangle
                 Button("Save to image") {

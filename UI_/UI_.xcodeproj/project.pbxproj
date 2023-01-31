@@ -19,6 +19,8 @@
 		E045CA5829795F18007667C4 /* UI_UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045CA5729795F18007667C4 /* UI_UITestsLaunchTests.swift */; };
 		E051F44C298307BC00E60BEF /* ResultImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = E051F44B298307BC00E60BEF /* ResultImg.swift */; };
 		E051F44E2986DDF500E60BEF /* TshirtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E051F44D2986DDF500E60BEF /* TshirtView.swift */; };
+		E051F45C298953E300E60BEF /* Pointillism.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E051F45B298953E200E60BEF /* Pointillism.mlmodel */; };
+		E051F45E298953EC00E60BEF /* StarryNight.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E051F45D298953EC00E60BEF /* StarryNight.mlmodel */; };
 		E0589A5D298200DC00A16173 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4C298200DB00A16173 /* Array+Extensions.swift */; };
 		E0589A5E298200DC00A16173 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4D298200DB00A16173 /* Math.swift */; };
 		E0589A5F298200DC00A16173 /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4E298200DB00A16173 /* UIImage+CVPixelBuffer.swift */; };
@@ -75,6 +77,8 @@
 		E045CA5729795F18007667C4 /* UI_UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI_UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E051F44B298307BC00E60BEF /* ResultImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultImg.swift; sourceTree = "<group>"; };
 		E051F44D2986DDF500E60BEF /* TshirtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TshirtView.swift; sourceTree = "<group>"; };
+		E051F45B298953E200E60BEF /* Pointillism.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = Pointillism.mlmodel; path = ../../../NSTDemo/NSTDemo/Pointillism.mlmodel; sourceTree = "<group>"; };
+		E051F45D298953EC00E60BEF /* StarryNight.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = StarryNight.mlmodel; path = ../../../NSTDemo/NSTDemo/StarryNight.mlmodel; sourceTree = "<group>"; };
 		E0589A4C298200DB00A16173 /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		E0589A4D298200DB00A16173 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		E0589A4E298200DB00A16173 /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
@@ -157,6 +161,8 @@
 				E025C19B297E999D00D648EE /* StepView.swift */,
 				E025C19D297E9AD300D648EE /* ChooseImgs.swift */,
 				E025C1AB2981E02E00D648EE /* RemoveBG.swift */,
+				E051F45B298953E200E60BEF /* Pointillism.mlmodel */,
+				E051F45D298953EC00E60BEF /* StarryNight.mlmodel */,
 				E051F44B298307BC00E60BEF /* ResultImg.swift */,
 				E051F44D2986DDF500E60BEF /* TshirtView.swift */,
 			);
@@ -342,6 +348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E051F45E298953EC00E60BEF /* StarryNight.mlmodel in Sources */,
 				E025C1AC2981E02E00D648EE /* RemoveBG.swift in Sources */,
 				E0589A69298200DC00A16173 /* NonMaxSuppression.swift in Sources */,
 				E0589A66298200DC00A16173 /* CoreML+Combine.swift in Sources */,
@@ -361,6 +368,7 @@
 				E0589A6B298200DC00A16173 /* MLMultiArray+Image.swift in Sources */,
 				E025C19E297E9AD300D648EE /* ChooseImgs.swift in Sources */,
 				E0589A702982017800A16173 /* DeepLabV3.mlmodel in Sources */,
+				E051F45C298953E300E60BEF /* Pointillism.mlmodel in Sources */,
 				E045CA3C29795F17007667C4 /* ContentView.swift in Sources */,
 				E0589A61298200DC00A16173 /* UIImage+Extensions.swift in Sources */,
 				E0589A68298200DC00A16173 /* CGImage+CVPixelBuffer.swift in Sources */,

@@ -44,17 +44,16 @@ struct RemoveBG: View {
         }
     }
     
-    var hStack2 : some View {
-        HStack {
-                HStack {
-                    ForEach(resultImage.indices, id: \.self) { index in
-                        Image(uiImage: self.resultImage[index])
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 75)
-                    }
-                }
+    var hStack2: some View {
+        ScrollView(.vertical) {
+            ForEach(resultImage.indices, id: \.self) { index in
+                Image(uiImage: self.resultImage[index])
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 75)
+            }
         }
+        .frame(height: 400)
     }
     
     var body: some View {
@@ -84,7 +83,7 @@ struct RemoveBG: View {
                     }
                 } else {
                     hStack2
-                    NavigationLink(destination: ResultImg(inputImage: self.inputImage)) {
+                    NavigationLink(destination: ResultImg(inputImage: self.resultImage)) {
                         Button(action: {}) {
                             Text("NEXT")
                                 .font(.system(size: 20) .weight(.bold))
@@ -107,40 +106,24 @@ struct RemoveBG: View {
         request.imageCropAndScaleOption = .scaleFill
         
         DispatchQueue.global().async {
-            for i in 0..<inputImage.count {
-                let handler = VNImageRequestHandler(cgImage: inputImage[i].cgImage!, options: [:])
-                do {
-                    try handler.perform([request])
-                }catch {
-                    print(error)
-                }
+            for image in inputImage {
+              let handler = VNImageRequestHandler(cgImage: image.cgImage!, options: [:])
+              do {
+                try handler.perform([request])
+              } catch {
+                print(error)
+              }
             }
         }
     }
     
     func maskInputImage() {
         print("maskInputImage: input \(inputImage.count), output \(outputImage.count)")
-        let bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: inputImage[0].size.width, height: inputImage[0].size.height), scale: inputImage[0].scale)!
-            
-        var divider = 0
+
+        for i in 0..<inputImage.count{
         
-        if inputImage.count > 0 {
-            divider = 1
-        }
+            let bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: inputImage[i].size.width, height: inputImage[i].size.height), scale: inputImage[i].scale)!
         
-        if inputImage.count > 1 {
-            divider = 2
-        }
-        
-        if inputImage.count > 3 {
-            divider = 4
-        }
-        
-        if inputImage.count > 4 {
-            divider = 5
-        }
-        
-        for i in 0..<inputImage.count/divider{
             let beginImage = CIImage(cgImage: inputImage[i].cgImage!)
             let background = CIImage(cgImage: bgImage.cgImage!)
             let mask = CIImage(cgImage: outputImage[i].cgImage!)
@@ -153,7 +136,57 @@ struct RemoveBG: View {
                 let ciContext = CIContext(options: nil)
                 let filteredImageRef = ciContext.createCGImage(compositeImage, from: compositeImage.extent)
                 resultImage.append(UIImage(cgImage: filteredImageRef!))
-//                outputImage.append(UIImage(cgImage: filteredImageRef!))
+            }
+        }
+        DispatchQueue.global().async {
+            if resultImage.count == 4 {
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+            }
+            
+            if resultImage.count == 9 {
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 2)
+                resultImage.remove(at: 3)
+            }
+            
+            if resultImage.count == 14 {
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 2)
+                resultImage.remove(at: 2)
+                resultImage.remove(at: 3)
+                resultImage.remove(at: 3)
+                resultImage.remove(at: 4)
+                resultImage.remove(at: 4)
+            }
+            
+            if resultImage.count == 25 {
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 1)
+                resultImage.remove(at: 2)
+                resultImage.remove(at: 2)
+                resultImage.remove(at: 3)
+                resultImage.remove(at: 3)
+                resultImage.remove(at: 3)
+                resultImage.remove(at: 4)
+                resultImage.remove(at: 4)
+                resultImage.remove(at: 4)
+                resultImage.remove(at: 5)
+                resultImage.remove(at: 5)
+                resultImage.remove(at: 5)
+                resultImage.remove(at: 5)
+                resultImage.remove(at: 5)
+                resultImage.remove(at: 5)
+                resultImage.remove(at: 5)
             }
         }
         isShown = true
@@ -164,7 +197,7 @@ struct RemoveBG: View {
             DispatchQueue.main.async {
                 if let observations = request.results as? [VNCoreMLFeatureValueObservation], let segmentationmap = observations.first?.featureValue.multiArrayValue {
                     
-                    let segmentationMask = segmentationmap.image(min: 0, max: 1)
+                    let segmentationMask = segmentationmap.image(min: 0, max: 2)
                     
                     for i in 0..<inputImage.count {
                         self.outputImage[i] = segmentationMask!.resizedImage(for: self.inputImage[i].size)!
