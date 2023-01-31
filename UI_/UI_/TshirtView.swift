@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import CoreML
+import Vision
 
 struct TshirtView: View {
     
@@ -14,6 +16,7 @@ struct TshirtView: View {
     @State private var squareDimension = 30
     @State private var cornerRadius = 10
     @State private var showingAlert = false
+    @State private var finalImage = UIImage()
     
     let colorName = ["ResultBlack", "ResultBlue", "ResultGreen", "ResultHotPink", "ResultRed", "ResultWhite"]
     
@@ -27,6 +30,7 @@ struct TshirtView: View {
     ]
     
     @State private var selectedColor: Color? = nil
+    var selectedNSTModel: NSTDemoModel = .starryNight
     
     var vStackView : some View {
         ZStack{
@@ -79,6 +83,11 @@ struct TshirtView: View {
                 }
                 .pickerStyle(.segmented)
                 .frame(width: 300)
+                
+                if (basicStyle == "StarryNight") {
+                    CallStarryNight()
+                }
+                
                 vStackView
                 roundedRectangle
                 Button("Save to image") {
@@ -91,6 +100,69 @@ struct TshirtView: View {
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Success"), message: Text("The image has been saved to your photo album"), dismissButton: .default(Text("OK")))
+        }
+    }
+    
+    func CallStarryNight() -> some View {
+        guard let model = try? VNCoreMLModel(for: StarryNight(configuration: .init()).model) else {
+            return AnyView(Text("Error loading model"))
+        }
+        
+        let request = VNCoreMLRequest(model: model) { (request, error) in
+            if request.results is [VNCoreMLFeatureValueObservation] {
+
+                // Call the process function and pass in the input image
+                self.process(input: globalImage) { (outputImage, error) in
+                    if let outputImage = outputImage {
+                        DispatchQueue.global().async {
+                            print("It is here")
+                            finalImage = outputImage
+                        }
+                    } else {
+                        // Handle the error
+                    }
+                }
+            }
+        }
+
+        DispatchQueue.global().async {
+            let handler = VNImageRequestHandler(cgImage: self.globalImage.cgImage!, options: [:])
+            do {
+                try handler.perform([request])
+            } catch {
+                print(error)
+            }
+        }
+        
+        return AnyView(Image(uiImage: finalImage))
+    }
+
+    func process(input: UIImage, completion: @escaping (UIImage?, Error?) -> Void) {
+        let startTime = CFAbsoluteTimeGetCurrent()
+        var outputImage: UIImage?
+        var nstError: Error?
+        print("1")
+
+        DispatchQueue.global().async {
+            do {
+                let modelProvider = try self.selectedNSTModel.modelProvider()
+                outputImage = try modelProvider.prediction(inputImage: input)
+            } catch let error {
+                nstError = error
+            }
+
+            DispatchQueue.main.async {
+                if let outputImage = outputImage {
+                    completion(outputImage, nil)
+                } else if let nstError = nstError{
+                    completion(nil, nstError)
+                } else {
+                    completion(nil, NSTError.unknown)
+                }
+
+                let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+                print("Time elapsed for NST process: \(timeElapsed) s.")
+            }
         }
     }
 }
