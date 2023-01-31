@@ -43,6 +43,19 @@ struct RemoveBG: View {
         }
     }
     
+    var hStack2 : some View {
+        HStack {
+                HStack {
+                    ForEach(inputImage.indices, id: \.self) { index in
+                        Image(uiImage: self.inputImage[index])
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 75)
+                    }
+                }
+        }
+    }
+    
     var body: some View {
         ZStack {
             Image("Background")
@@ -69,7 +82,7 @@ struct RemoveBG: View {
                         ActivityIndicator(isAnimating: $loadingBar, style: .large)
                     }
                 } else {
-                    hStack
+                    hStack2
                     NavigationLink(destination: ResultImg(inputImage: self.inputImage)) {
                         Button(action: {}) {
                             Text("NEXT")
@@ -92,9 +105,9 @@ struct RemoveBG: View {
         let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
         request.imageCropAndScaleOption = .scaleFill
         
-        for i in 0..<inputImage.count {
-            let handler = VNImageRequestHandler(cgImage: inputImage[i].cgImage!, options: [:])
-            DispatchQueue.global().async {
+        DispatchQueue.global().async {
+            for i in 0..<inputImage.count {
+                let handler = VNImageRequestHandler(cgImage: inputImage[i].cgImage!, options: [:])
                 do {
                     try handler.perform([request])
                 }catch {
@@ -102,35 +115,26 @@ struct RemoveBG: View {
                 }
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            loadingBar = false
-        }
     }
     
     func maskInputImage() {
-        
-        var bgImage: UIImage
-        var beginImage: CIImage
-        var background: CIImage
-        var mask: CIImage
-        
-        for i in 0..<inputImage.count {
-            bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: self.inputImage[i].size.width, height: self.inputImage[i].size.height), scale: self.inputImage[i].scale)!
+        print("maskInputImage: input \(inputImage.count), output \(outputImage.count)")
+        let bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: inputImage[0].size.width, height: inputImage[0].size.height), scale: inputImage[0].scale)!
 
-            beginImage = CIImage(cgImage: inputImage[i].cgImage!)
-            background = CIImage(cgImage: bgImage.cgImage!)
-            mask = CIImage(cgImage: outputImage[i].cgImage!)
+        for i in 0..<inputImage.count {
+            let beginImage = CIImage(cgImage: inputImage[i].cgImage!)
+            let background = CIImage(cgImage: bgImage.cgImage!)
+            let mask = CIImage(cgImage: outputImage[i].cgImage!)
 
             if let compositeImage = CIFilter(name: "CIBlendWithMask", parameters: [
-                                            kCIInputImageKey: beginImage,
-                                            kCIInputBackgroundImageKey:background,
-                                            kCIInputMaskImageKey:mask])?.outputImage
+                                    kCIInputImageKey: beginImage,
+                                    kCIInputBackgroundImageKey:background,
+                                    kCIInputMaskImageKey:mask])?.outputImage
             {
                 let ciContext = CIContext(options: nil)
-
                 let filteredImageRef = ciContext.createCGImage(compositeImage, from: compositeImage.extent)
-
-                inputImage[i] = UIImage(cgImage: filteredImageRef!)
+                inputImage.append(UIImage(cgImage: filteredImageRef!))
+                outputImage.append(UIImage(cgImage: filteredImageRef!))
             }
         }
         isShown = true
@@ -138,31 +142,19 @@ struct RemoveBG: View {
 
 
     func visionRequestDidComplete(request: VNRequest, error: Error?) {
-        for i in 0..<inputImage.count {
+        print("visionRequestDidComplete")
             DispatchQueue.main.async {
                 if let observations = request.results as? [VNCoreMLFeatureValueObservation], let segmentationmap = observations.first?.featureValue.multiArrayValue {
                     
                     let segmentationMask = segmentationmap.image(min: 0, max: 1)
                     
-                    self.outputImage[i] = segmentationMask!.resizedImage(for: self.inputImage[i].size)!
-                    
-                    // check for person
-                    let request = VNDetectHumanRectanglesRequest { (request, error) in
-                        if let observations = request.results as? [VNDetectedObjectObservation], !observations.isEmpty {
-                            // person detected
-                            self.maskInputImage()
-                            print("Img #\(inputImage[i]): Person is detected")
-                        } else {
-                            // person not detected
-                            print("Img #\(inputImage[i]): Person is not detected")
-                        }
+                    for i in 0..<inputImage.count {
+                        self.outputImage[i] = segmentationMask!.resizedImage(for: self.inputImage[i].size)!
                     }
-                    // Perform the request
-                    let handler = VNImageRequestHandler(cgImage: self.inputImage[i].cgImage!, options: [:])
-                    try? handler.perform([request])
+                    
+                    self.maskInputImage()
                 }
             }
-        }
     }
 }
 

@@ -19,6 +19,9 @@ struct ResultImg: View {
     @State private var squareDimension = 30
     @State private var cornerRadius = 10
     let minimumScale: CGFloat = -1.0
+    
+    @State private var selection = "Explosion"
+    let backgroundImage = ["Explosion", "Electric", "Cash", "American Flag", "None"]
 
     init(inputImage: [UIImage]) {
         self._inputImage = State(initialValue: inputImage)
@@ -31,6 +34,12 @@ struct ResultImg: View {
             Rectangle()
                 .frame(width: 300, height: 300)
                 .foregroundColor(selectedColor)
+            if selection != "none" {
+                Image(selection)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 300, height: 300)
+            }
             ForEach(inputImage.indices, id: \.self) { index in
                 Image(uiImage: self.inputImage[index])
                     .resizable()
@@ -96,7 +105,11 @@ struct ResultImg: View {
                     .font(.system(size: 20) .weight(.regular))
                     .font(.custom("NunitoSans", size: 20))
                     .foregroundColor(Color("DarkBlue"))
-                    .padding()
+                Picker("Select a background", selection: $selection) {
+                    ForEach(backgroundImage, id: \.self) {
+                        Text($0)
+                    }
+                }
                 zStackView
                 roundedRectangle
                 Button("Save to image") {
