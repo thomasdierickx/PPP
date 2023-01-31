@@ -16,6 +16,7 @@ struct RemoveBG: View {
     @State var outputImage: [UIImage]
     @State var isShown = false
     @State private var loadingBar = false
+    @State var resultImage = [UIImage]()
     
     struct ActivityIndicator: UIViewRepresentable {
         @Binding var isAnimating: Bool
@@ -32,7 +33,7 @@ struct RemoveBG: View {
     
     var hStack : some View {
         HStack {
-            VStack {
+            HStack {
                 ForEach(inputImage.indices, id: \.self) { index in
                     Image(uiImage: self.inputImage[index])
                         .resizable()
@@ -46,8 +47,8 @@ struct RemoveBG: View {
     var hStack2 : some View {
         HStack {
                 HStack {
-                    ForEach(inputImage.indices, id: \.self) { index in
-                        Image(uiImage: self.inputImage[index])
+                    ForEach(resultImage.indices, id: \.self) { index in
+                        Image(uiImage: self.resultImage[index])
                             .resizable()
                             .scaledToFit()
                             .frame(width: 75)
@@ -120,8 +121,26 @@ struct RemoveBG: View {
     func maskInputImage() {
         print("maskInputImage: input \(inputImage.count), output \(outputImage.count)")
         let bgImage = UIImage.imageFromColor(color: UIColor(Color.black.opacity(0.0)), size: CGSize(width: inputImage[0].size.width, height: inputImage[0].size.height), scale: inputImage[0].scale)!
-
-        for i in 0..<inputImage.count {
+            
+        var divider = 0
+        
+        if inputImage.count > 0 {
+            divider = 1
+        }
+        
+        if inputImage.count > 1 {
+            divider = 2
+        }
+        
+        if inputImage.count > 3 {
+            divider = 4
+        }
+        
+        if inputImage.count > 4 {
+            divider = 5
+        }
+        
+        for i in 0..<inputImage.count/divider{
             let beginImage = CIImage(cgImage: inputImage[i].cgImage!)
             let background = CIImage(cgImage: bgImage.cgImage!)
             let mask = CIImage(cgImage: outputImage[i].cgImage!)
@@ -133,13 +152,12 @@ struct RemoveBG: View {
             {
                 let ciContext = CIContext(options: nil)
                 let filteredImageRef = ciContext.createCGImage(compositeImage, from: compositeImage.extent)
-                inputImage.append(UIImage(cgImage: filteredImageRef!))
-                outputImage.append(UIImage(cgImage: filteredImageRef!))
+                resultImage.append(UIImage(cgImage: filteredImageRef!))
+//                outputImage.append(UIImage(cgImage: filteredImageRef!))
             }
         }
         isShown = true
     }
-
 
     func visionRequestDidComplete(request: VNRequest, error: Error?) {
         print("visionRequestDidComplete")
@@ -151,7 +169,6 @@ struct RemoveBG: View {
                     for i in 0..<inputImage.count {
                         self.outputImage[i] = segmentationMask!.resizedImage(for: self.inputImage[i].size)!
                     }
-                    
                     self.maskInputImage()
                 }
             }
