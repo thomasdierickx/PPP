@@ -2,8 +2,6 @@
 //  ImageCarouselView.swift
 //  ImageCarousel
 //
-//  Created by Thomas Dierickx on 19/01/2023.
-//
 
 import SwiftUI
 import Combine
@@ -22,7 +20,6 @@ struct ImageCarouselView<Content: View>: View {
 
     var body: some View {
         GeometryReader { geometry in
-            // 1
             ZStack(alignment: .bottom) {
                 HStack(spacing: 0) {
                     self.content
@@ -30,10 +27,8 @@ struct ImageCarouselView<Content: View>: View {
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
                     .offset(x: CGFloat(self.currentIndex) * -geometry.size.width, y: 0)
                     .animation(.spring())
-                    // Comment .onReceive method, to omit the Slider with time
                     .onReceive(self.timer) { _ in
                         self.currentIndex = (self.currentIndex + 1) % (self.numberOfImages == 0 ? 1 : self.numberOfImages)}
-                    // Comment .gesture method, to omit the Swipe function
                     .gesture(DragGesture().onChanged{ value in
                         self.slideGesture = value.translation
                     }
@@ -54,12 +49,8 @@ struct ImageCarouselView<Content: View>: View {
                         }
                         self.slideGesture = .zero
                     })
-                
-                // 2
                 HStack(spacing: 8) {
-                    // 3
                     ForEach(0..<self.numberOfImages, id: \.self) { index in
-                         // 4
                         Circle()
                             .frame(width: index == self.currentIndex ? 10 : 8,
                                    height: index == self.currentIndex ? 10 : 8)

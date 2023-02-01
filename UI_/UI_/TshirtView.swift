@@ -72,6 +72,9 @@ struct TshirtView: View {
             VStack {
                 vStackView
                 roundedRectangle
+                Button("Run Core ML") {
+                    runCoreML(inputImage: self.globalImage)
+                }
                 Button("Save to image") {
                     let image = vStackView.snapshot()
 
@@ -82,6 +85,38 @@ struct TshirtView: View {
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Success"), message: Text("The image has been saved to your photo album"), dismissButton: .default(Text("OK")))
+        }
+    }
+    
+    func runCoreML(inputImage: UIImage) {
+        // Load the Core ML model
+        guard let model = try? VNCoreMLModel(for: StarryNight(configuration: .init()).model) else {
+            fatalError("Can't load Core ML model")
+        }
+        
+        // Create a request to run the model
+        let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
+        request.imageCropAndScaleOption = .scaleFill
+
+        // Convert the input image to a CIImage
+        let ciInputImage = CIImage(image: globalImage)!
+        
+        // Create a handler to perform the request
+        let handler = VNImageRequestHandler(ciImage: ciInputImage)
+        do {
+            try handler.perform([request])
+        } catch {
+            print(error)
+        }
+    }
+    
+    func visionRequestDidComplete(request: VNRequest, error: Error?) {
+        if let results = request.results as? [VNCoreMLFeatureValueObservation], let outputImage = results.first?.featureValue.imageBufferValue {
+            DispatchQueue.main.async {
+                self.globalImage = UIImage(ciImage: CIImage(cvPixelBuffer: outputImage))
+            }
+        } else {
+            print("Unexpected result type from VNCoreMLRequest")
         }
     }
 }
