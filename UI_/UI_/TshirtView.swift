@@ -90,7 +90,7 @@ struct TshirtView: View {
     
     func runCoreML(inputImage: UIImage) {
         // Load the Core ML model
-        guard let model = try? VNCoreMLModel(for: StarryNight(configuration: .init()).model) else {
+        guard let model = try? VNCoreMLModel(for: Style1(configuration: .init()).model) else {
             fatalError("Can't load Core ML model")
         }
         

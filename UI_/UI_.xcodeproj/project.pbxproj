@@ -20,7 +20,7 @@
 		E051F44C298307BC00E60BEF /* ResultImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = E051F44B298307BC00E60BEF /* ResultImg.swift */; };
 		E051F44E2986DDF500E60BEF /* TshirtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E051F44D2986DDF500E60BEF /* TshirtView.swift */; };
 		E051F474298A045500E60BEF /* StarryNight.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E051F473298A045500E60BEF /* StarryNight.mlmodel */; };
-		E051F476298A069300E60BEF /* Style1.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = E051F475298A069300E60BEF /* Style1.mlpackage */; };
+		E051F478298A0D8D00E60BEF /* Style1.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E051F477298A0D8C00E60BEF /* Style1.mlmodel */; };
 		E0589A5D298200DC00A16173 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4C298200DB00A16173 /* Array+Extensions.swift */; };
 		E0589A5E298200DC00A16173 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4D298200DB00A16173 /* Math.swift */; };
 		E0589A5F298200DC00A16173 /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A4E298200DB00A16173 /* UIImage+CVPixelBuffer.swift */; };
@@ -78,7 +78,7 @@
 		E051F44B298307BC00E60BEF /* ResultImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultImg.swift; sourceTree = "<group>"; };
 		E051F44D2986DDF500E60BEF /* TshirtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TshirtView.swift; sourceTree = "<group>"; };
 		E051F473298A045500E60BEF /* StarryNight.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = StarryNight.mlmodel; path = ../../../../StarryNight.mlmodel; sourceTree = "<group>"; };
-		E051F475298A069300E60BEF /* Style1.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = Style1.mlpackage; sourceTree = "<group>"; };
+		E051F477298A0D8C00E60BEF /* Style1.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Style1.mlmodel; sourceTree = "<group>"; };
 		E0589A4C298200DB00A16173 /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		E0589A4D298200DB00A16173 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		E0589A4E298200DB00A16173 /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 				E025C19B297E999D00D648EE /* StepView.swift */,
 				E025C19D297E9AD300D648EE /* ChooseImgs.swift */,
 				E025C1AB2981E02E00D648EE /* RemoveBG.swift */,
-				E051F475298A069300E60BEF /* Style1.mlpackage */,
+				E051F477298A0D8C00E60BEF /* Style1.mlmodel */,
 				E051F473298A045500E60BEF /* StarryNight.mlmodel */,
 				E051F44B298307BC00E60BEF /* ResultImg.swift */,
 				E051F44D2986DDF500E60BEF /* TshirtView.swift */,
@@ -355,7 +355,6 @@
 				E0589A5D298200DC00A16173 /* Array+Extensions.swift in Sources */,
 				E0589A712982017800A16173 /* UIImage+CustomExtensions.swift in Sources */,
 				E0589A60298200DC00A16173 /* Predictions.swift in Sources */,
-				E051F476298A069300E60BEF /* Style1.mlpackage in Sources */,
 				E0589A5F298200DC00A16173 /* UIImage+CVPixelBuffer.swift in Sources */,
 				E0589A64298200DC00A16173 /* MLMultiArray+Helpers.swift in Sources */,
 				E051F44C298307BC00E60BEF /* ResultImg.swift in Sources */,
@@ -372,6 +371,7 @@
 				E045CA3C29795F17007667C4 /* ContentView.swift in Sources */,
 				E0589A61298200DC00A16173 /* UIImage+Extensions.swift in Sources */,
 				E0589A68298200DC00A16173 /* CGImage+CVPixelBuffer.swift in Sources */,
+				E051F478298A0D8D00E60BEF /* Style1.mlmodel in Sources */,
 				E0589A65298200DC00A16173 /* MLModel+Images.swift in Sources */,
 				E0589A63298200DC00A16173 /* UIImage+RawBytes.swift in Sources */,
 				E045CA3A29795F17007667C4 /* UI_App.swift in Sources */,
