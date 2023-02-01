@@ -31,7 +31,7 @@ struct TshirtView: View {
     
     var vStackView : some View {
         ZStack{
-            if (colorToImage.imageAsset == nil) {
+            if (selectedColor == nil) {
                 Image("ResultBlack")
                     .resizable()
                     .scaledToFit()
@@ -70,6 +70,17 @@ struct TshirtView: View {
         ZStack {
             Image("Background")
             VStack {
+                Text("Make your own")
+                    .font(.system(size: 15) .weight(.bold))
+                    .font(.custom("NunitoSans", size: 15))
+                    .foregroundColor(Color("DarkBlue"))
+                Text("T-SHIRT")
+                    .font(.system(size: 50) .weight(.heavy))
+                    .foregroundColor(Color("DarkBlue"))
+                Text("Personalize your composition \n & save it!")
+                    .font(.system(size: 20) .weight(.regular))
+                    .font(.custom("NunitoSans", size: 20))
+                    .foregroundColor(Color("DarkBlue"))
                 vStackView
                 roundedRectangle
                 Button("Run Core ML") {
@@ -99,7 +110,7 @@ struct TshirtView: View {
         request.imageCropAndScaleOption = .scaleFill
 
         // Convert the input image to a CIImage
-        let ciInputImage = CIImage(image: globalImage)!
+        let ciInputImage = CIImage(image: inputImage)!
         
         // Create a handler to perform the request
         let handler = VNImageRequestHandler(ciImage: ciInputImage)
@@ -111,9 +122,10 @@ struct TshirtView: View {
     }
     
     func visionRequestDidComplete(request: VNRequest, error: Error?) {
-        if let results = request.results as? [VNCoreMLFeatureValueObservation], let outputImage = results.first?.featureValue.imageBufferValue {
+        if let results = request.results as? [VNPixelBufferObservation], let outputImageBuffer = results.first?.pixelBuffer {
             DispatchQueue.main.async {
-                self.globalImage = UIImage(ciImage: CIImage(cvPixelBuffer: outputImage))
+                self.globalImage = UIImage(pixelBuffer: outputImageBuffer)!
+//                self.globalImage = UIImage(ciImage: CIImage(cvPixelBuffer: outputImage))
             }
         } else {
             print("Unexpected result type from VNCoreMLRequest")

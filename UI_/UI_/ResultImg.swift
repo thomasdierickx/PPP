@@ -113,7 +113,7 @@ struct ResultImg: View {
                     .font(.custom("NunitoSans", size: 15))
                     .foregroundColor(Color("DarkBlue"))
                 Text("T-SHIRT")
-                    .font(.system(size: 70) .weight(.heavy))
+                    .font(.system(size: 50) .weight(.heavy))
                     .foregroundColor(Color("DarkBlue"))
                 Text("Personalize your composition \n & save it!")
                     .font(.system(size: 20) .weight(.regular))
@@ -130,23 +130,28 @@ struct ResultImg: View {
                 TextField("Enter some text", text: $text2)
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 300, height: 60)
-                Button("Save to image") {
-                    let image = zStackView.snapshot()
-
-                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                    self.showingAlert = true
-                }
-                NavigationLink(destination: TshirtView(globalImage: globalImage, colorToImage: UIImage())) {
-                    Button(action: {}) {
-                        Text("SOW ON T-SHIRT")
-                            .font(.system(size: 20) .weight(.bold))
-                            .foregroundColor(Color("White"))
+                HStack {
+                    Image("download")
+                        .frame(width: 50)
+                        .background(Color("LightBlue"))
+                        .cornerRadius(30)
+                        .onTapGesture {
+                            let image = zStackView.snapshot()
+                            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                            self.showingAlert = true
+                        }
+                        .padding()
+                    NavigationLink(destination: TshirtView(globalImage: globalImage, colorToImage: UIImage())) {
+                        Button(action: {}) {
+                            Text("SHOW ON T-SHIRT")
+                                .font(.system(size: 20) .weight(.bold))
+                                .foregroundColor(Color("White"))
+                        }
+                        .frame(maxWidth: 250, maxHeight: 50)
+                        .background(Color("LightBlue"))
+                        .cornerRadius(30)
                     }
-                    .frame(maxWidth: 300, maxHeight: 50)
-                    .background(Color("LightBlue"))
-                    .cornerRadius(30)
                 }
-                .padding()
             }
         }
         .alert(isPresented: $showingAlert) {
