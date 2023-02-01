@@ -69,23 +69,28 @@ struct ChooseImgs: View {
                             }
                             .frame(maxWidth: 300, maxHeight: 50)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 30)
-                                    .stroke(Color("LightBlue"), lineWidth: 6)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color("LightBlue"), lineWidth: 3)
                             )
-                            .cornerRadius(30)
                         }
                         .padding()
                     }
                     if inputImage.count >= imgMin {
                         NavigationLink(destination: RemoveBG(inputImage: self.inputImage, outputImage: self.inputImage)) {
                             Button(action: {}) {
-                                Text("NEXT")
-                                    .font(.system(size: 20) .weight(.bold))
-                                    .foregroundColor(Color("White"))
+                                HStack {
+                                    Text("TO STEP 2")
+                                        .font(.system(size: 20) .weight(.bold))
+                                        .foregroundColor(Color("White"))
+                                    Image("arrow")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                }
                             }
-                            .frame(maxWidth: 300, maxHeight: 50)
+                            .frame(width: 300, height: 50)
                             .background(Color("LightBlue"))
-                            .cornerRadius(30)
+                            .cornerRadius(10)
                         }
                         .padding()
                     }

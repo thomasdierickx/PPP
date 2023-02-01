@@ -45,7 +45,7 @@ struct RemoveBG: View {
     }
     
     var hStack2: some View {
-        ScrollView(.vertical) {
+        HStack {
             ForEach(resultImage.indices, id: \.self) { index in
                 Image(uiImage: self.resultImage[index])
                     .resizable()
@@ -53,7 +53,6 @@ struct RemoveBG: View {
                     .frame(width: 75)
             }
         }
-        .frame(height: 400)
     }
     
     var body: some View {
@@ -74,9 +73,16 @@ struct RemoveBG: View {
                     .padding()
                 if !isShown {
                     hStack
-                    Button(action: {runVisionRequest()}, label: {
-                        Text("Run Image Segmentation")
-                    })
+                    Button(action: {runVisionRequest()}) {
+                        Text("Run image segmentation")
+                            .font(.system(size: 20) .weight(.bold))
+                            .foregroundColor(Color("LightBlue"))
+                    }
+                    .frame(maxWidth: 300, maxHeight: 50)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("LightBlue"), lineWidth: 3)
+                    )
                     .padding()
                     if loadingBar {
                         ActivityIndicator(isAnimating: $loadingBar, style: .large)
@@ -85,15 +91,20 @@ struct RemoveBG: View {
                     hStack2
                     NavigationLink(destination: ResultImg(inputImage: self.resultImage)) {
                         Button(action: {}) {
-                            Text("NEXT")
-                                .font(.system(size: 20) .weight(.bold))
-                                .foregroundColor(Color("White"))
+                            HStack {
+                                Text("TO STEP 3")
+                                    .font(.system(size: 20) .weight(.bold))
+                                    .foregroundColor(Color("White"))
+                                Image("arrow")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                            }
                         }
                         .frame(maxWidth: 300, maxHeight: 50)
                         .background(Color("LightBlue"))
-                        .cornerRadius(30)
+                        .cornerRadius(10)
                     }
-                    .padding()
                 }
             }
         }

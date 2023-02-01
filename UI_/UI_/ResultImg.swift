@@ -131,25 +131,37 @@ struct ResultImg: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 300, height: 60)
                 HStack {
-                    Image("download")
-                        .frame(width: 50)
-                        .background(Color("LightBlue"))
-                        .cornerRadius(30)
-                        .onTapGesture {
-                            let image = zStackView.snapshot()
-                            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                            self.showingAlert = true
-                        }
-                        .padding()
+                    Button(action: {
+                        let image = zStackView.snapshot()
+                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                        self.showingAlert = true
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("LightBlue"))
+                            .frame(width: 50, height: 50)
+                            .overlay(
+                                Image("download")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 25)
+                            )
+                    }
                     NavigationLink(destination: TshirtView(globalImage: globalImage, colorToImage: UIImage())) {
                         Button(action: {}) {
-                            Text("SHOW ON T-SHIRT")
-                                .font(.system(size: 20) .weight(.bold))
-                                .foregroundColor(Color("White"))
+                            HStack {
+                                Text("SHOW ON TSHIRT")
+                                    .font(.system(size: 20) .weight(.bold))
+                                    .foregroundColor(Color("White"))
+                                Image("arrow")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                            }
                         }
                         .frame(maxWidth: 250, maxHeight: 50)
                         .background(Color("LightBlue"))
-                        .cornerRadius(30)
+                        .cornerRadius(10)
                     }
                 }
             }

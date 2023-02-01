@@ -17,6 +17,7 @@ struct TshirtView: View {
     @State private var cornerRadius = 10
     @State private var showingAlert = false
     @State private var selectedColor: Color? = nil
+    @State private var modelName = ""
     
     let colorName = ["ResultBlack", "ResultBlue", "ResultGreen", "ResultHotPink", "ResultRed", "ResultWhite"]
     
@@ -83,14 +84,71 @@ struct TshirtView: View {
                     .foregroundColor(Color("DarkBlue"))
                 vStackView
                 roundedRectangle
-                Button("Run Core ML") {
-                    runCoreML(inputImage: self.globalImage)
-                }
-                Button("Save to image") {
-                    let image = vStackView.snapshot()
-
-                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                    self.showingAlert = true
+                Text("Style transfer")
+                    .font(.system(size: 20) .weight(.regular))
+                    .font(.custom("NunitoSans", size: 20))
+                    .foregroundColor(Color("DarkBlue"))
+                HStack {
+                    Button(action: {
+                        let image = vStackView.snapshot()
+                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                        self.showingAlert = true
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("LightBlue"))
+                            .frame(width: 50, height: 50)
+                            .overlay(
+                                Image("download")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 25)
+                            )
+                    }
+                    Button(action: {
+                        modelName = "4"
+                        runCoreML(inputImage: self.globalImage, modelName: modelName)
+                    }) {
+                        Text("Back")
+                            .frame(width: 50, height: 50)
+                            .background(Color("LightBlue"))
+                            .cornerRadius(10)
+                            .foregroundColor(Color("White"))
+                            .font(.system(size: 15) .weight(.bold))
+                    }
+                    Button(action: {
+                        modelName = "1"
+                        runCoreML(inputImage: self.globalImage, modelName: modelName)
+                    }) {
+                        Image("VGCover")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .background(Color.red)
+                            .cornerRadius(10)
+                    }
+                    Button(action: {
+                        modelName = "2"
+                        runCoreML(inputImage: self.globalImage, modelName: modelName)
+                    }) {
+                        Image("PietMondriaan")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .background(Color.red)
+                            .cornerRadius(10)
+                    }
+                    Button(action: {
+                        modelName = "3"
+                        runCoreML(inputImage: self.globalImage, modelName: modelName)
+                    }) {
+                        Image("USSR")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .background(Color.red)
+                            .cornerRadius(10)
+                    }
                 }
             }
         }
@@ -99,25 +157,76 @@ struct TshirtView: View {
         }
     }
     
-    func runCoreML(inputImage: UIImage) {
+    func runCoreML(inputImage: UIImage, modelName: String) {
+        var OGimage = [globalImage]
+        
+        if (modelName == "4") {
+            globalImage = OGimage[0]
+            print("Test")
+        }
+
         // Load the Core ML model
-        guard let model = try? VNCoreMLModel(for: Style1(configuration: .init()).model) else {
-            fatalError("Can't load Core ML model")
+        if modelName == "1" {
+            guard let model = try? VNCoreMLModel(for: Style1(configuration: .init()).model) else {
+                fatalError("Can't load Core ML model")
+            }
+            
+            // Create a request to run the model
+            let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
+            request.imageCropAndScaleOption = .scaleFill
+
+            // Convert the input image to a CIImage
+            let ciInputImage = CIImage(image: inputImage)!
+            
+            // Create a handler to perform the request
+            let handler = VNImageRequestHandler(ciImage: ciInputImage)
+            do {
+                try handler.perform([request])
+            } catch {
+                print(error)
+            }
         }
         
-        // Create a request to run the model
-        let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
-        request.imageCropAndScaleOption = .scaleFill
+        if (modelName == "2") {
+                guard let model = try? VNCoreMLModel(for: Style2(configuration: .init()).model) else {
+                    fatalError("Can't load Core ML model")
+                }
+                
+                // Create a request to run the model
+                let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
+                request.imageCropAndScaleOption = .scaleFill
 
-        // Convert the input image to a CIImage
-        let ciInputImage = CIImage(image: inputImage)!
+                // Convert the input image to a CIImage
+                let ciInputImage = CIImage(image: inputImage)!
+                
+                // Create a handler to perform the request
+                let handler = VNImageRequestHandler(ciImage: ciInputImage)
+                do {
+                    try handler.perform([request])
+                } catch {
+                    print(error)
+                }
+        }
         
-        // Create a handler to perform the request
-        let handler = VNImageRequestHandler(ciImage: ciInputImage)
-        do {
-            try handler.perform([request])
-        } catch {
-            print(error)
+        if (modelName == "3") {
+            guard let model = try? VNCoreMLModel(for: Style3(configuration: .init()).model) else {
+                fatalError("Can't load Core ML model")
+            }
+            
+            // Create a request to run the model
+            let request = VNCoreMLRequest(model: model, completionHandler: visionRequestDidComplete)
+            request.imageCropAndScaleOption = .scaleFill
+
+            // Convert the input image to a CIImage
+            let ciInputImage = CIImage(image: inputImage)!
+            
+            // Create a handler to perform the request
+            let handler = VNImageRequestHandler(ciImage: ciInputImage)
+            do {
+                try handler.perform([request])
+            } catch {
+                print(error)
+            }
         }
     }
     

@@ -40,6 +40,8 @@
 		E0589A6D298200DC00A16173 /* CVPixelBuffer+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A5C298200DB00A16173 /* CVPixelBuffer+Rotate.swift */; };
 		E0589A702982017800A16173 /* DeepLabV3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E0589A6E2982017700A16173 /* DeepLabV3.mlmodel */; };
 		E0589A712982017800A16173 /* UIImage+CustomExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0589A6F2982017800A16173 /* UIImage+CustomExtensions.swift */; };
+		E07459C5298AEEBA00E73FA0 /* Style2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E07459C4298AEEB900E73FA0 /* Style2.mlmodel */; };
+		E07459C7298AF34500E73FA0 /* Style3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E07459C6298AF34500E73FA0 /* Style3.mlmodel */; };
 		E0FC851F2979896D00AA9640 /* ImageCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0FC851E2979896D00AA9640 /* ImageCarouselView.swift */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +100,8 @@
 		E0589A5C298200DB00A16173 /* CVPixelBuffer+Rotate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Rotate.swift"; sourceTree = "<group>"; };
 		E0589A6E2982017700A16173 /* DeepLabV3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DeepLabV3.mlmodel; sourceTree = "<group>"; };
 		E0589A6F2982017800A16173 /* UIImage+CustomExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CustomExtensions.swift"; sourceTree = "<group>"; };
+		E07459C4298AEEB900E73FA0 /* Style2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Style2.mlmodel; sourceTree = "<group>"; };
+		E07459C6298AF34500E73FA0 /* Style3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Style3.mlmodel; sourceTree = "<group>"; };
 		E0FC851E2979896D00AA9640 /* ImageCarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,6 +166,8 @@
 				E025C19D297E9AD300D648EE /* ChooseImgs.swift */,
 				E025C1AB2981E02E00D648EE /* RemoveBG.swift */,
 				E051F477298A0D8C00E60BEF /* Style1.mlmodel */,
+				E07459C4298AEEB900E73FA0 /* Style2.mlmodel */,
+				E07459C6298AF34500E73FA0 /* Style3.mlmodel */,
 				E051F473298A045500E60BEF /* StarryNight.mlmodel */,
 				E051F44B298307BC00E60BEF /* ResultImg.swift */,
 				E051F44D2986DDF500E60BEF /* TshirtView.swift */,
@@ -354,6 +360,7 @@
 				E0589A66298200DC00A16173 /* CoreML+Combine.swift in Sources */,
 				E0589A5D298200DC00A16173 /* Array+Extensions.swift in Sources */,
 				E0589A712982017800A16173 /* UIImage+CustomExtensions.swift in Sources */,
+				E07459C7298AF34500E73FA0 /* Style3.mlmodel in Sources */,
 				E0589A60298200DC00A16173 /* Predictions.swift in Sources */,
 				E0589A5F298200DC00A16173 /* UIImage+CVPixelBuffer.swift in Sources */,
 				E0589A64298200DC00A16173 /* MLMultiArray+Helpers.swift in Sources */,
@@ -365,6 +372,7 @@
 				E0589A6D298200DC00A16173 /* CVPixelBuffer+Rotate.swift in Sources */,
 				E051F44E2986DDF500E60BEF /* TshirtView.swift in Sources */,
 				E0FC851F2979896D00AA9640 /* ImageCarouselView.swift in Sources */,
+				E07459C5298AEEBA00E73FA0 /* Style2.mlmodel in Sources */,
 				E0589A6B298200DC00A16173 /* MLMultiArray+Image.swift in Sources */,
 				E025C19E297E9AD300D648EE /* ChooseImgs.swift in Sources */,
 				E0589A702982017800A16173 /* DeepLabV3.mlmodel in Sources */,

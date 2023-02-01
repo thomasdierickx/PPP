@@ -39,9 +39,9 @@ struct ContentView: View {
                                 .font(.system(size: 20) .weight(.bold))
                                 .foregroundColor(Color("White"))
                         }
-                        .frame(maxWidth: 300, maxHeight: 50)
+                        .frame(width: 300, height: 50)
                         .background(Color("LightBlue"))
-                        .cornerRadius(30)
+                        .cornerRadius(10)
                     }
                     .padding()
                     .navigationBarBackButtonHidden(false)
